@@ -16,7 +16,7 @@ Board::Board()
   */
   for (int i = 0; i < 9; i++)
   {
-    *(squares + i) = 0;
+    squares[i] = 0;
   }
 }
 
@@ -37,7 +37,7 @@ int Board::query(int coord)
   @return 0, 1, or 2 each representing "unoccupied," "X," or "O" respectively.
   */
   int state = 0;
-  state = *(squares + coord - 1);
+  state = squares[coord - 1];
   return state;
 }
 
@@ -55,10 +55,10 @@ void Board::place(int coord, int piece)
 
   @return none
   */
-  *(squares + coord - 1) = piece;
+  squares[coord - 1] = piece;
 }
 
-bool horizontal(int *board, int piece)
+bool horizontal(int board[10], int piece)
 {
   /*
   @brief Checks if there is a same piece put in any horizontal rows
@@ -72,11 +72,11 @@ bool horizontal(int *board, int piece)
   */
   for (int i = 0; i < 3; i++) // repeat for 3 rows
   {
-    if (*(board + 3 * i) == piece) // check first column
+    if (board[3 * i] == piece) // check first column
     {
-      if (*(board + 3 * i + 1) == piece) // check second column
+      if (board[3 * i + 1] == piece) // check second column
       {
-        if (*(board + 3 * i + 2) == piece) // check third column
+        if (board[3 * i + 2] == piece) // check third column
         {
           return true;
         }
@@ -86,7 +86,7 @@ bool horizontal(int *board, int piece)
   return false;
 }
 
-bool vertical(int *board, int piece)
+bool vertical(int board[10], int piece)
 {
   /*
   @brief Checks if there is a same piece put in any vertical columns
@@ -100,11 +100,11 @@ bool vertical(int *board, int piece)
   */
   for (int i = 0; i < 3; i++) // repeat for 3 columns
   {
-    if (*(board + i) == piece) // check first row
+    if (board[i] == piece) // check first row
     {
-      if (*(board + i + 3) == piece) // check second row
+      if (board[i + 3] == piece) // check second row
       {
-        if (*(board + i + 6) == piece) // check third row
+        if (board[i + 6] == piece) // check third row
         {
           return true;
         }
@@ -114,7 +114,7 @@ bool vertical(int *board, int piece)
   return false;
 }
 
-bool diagonal(int *board, int piece)
+bool diagonal(int board[10], int piece)
 {
   /*
   @brief Checks if there is a same piece put in a diagonal line
@@ -127,21 +127,21 @@ bool diagonal(int *board, int piece)
   @return True if there is a diagonal alignment False if there is none
   */
   /* First diagonal line: line towards right bottom */
-  if (*board == piece)
+  if (board[0] == piece)
   {
-    if (*(board + 4) == piece)
+    if (board[4] == piece)
     {
-      if (*(board + 8) == piece)
+      if (board[8] == piece)
       {
         return true;
       }
     }
   }
-  else if (*(board + 2) == piece)
+  else if (board[2] == piece)
   {
-    if (*(board + 4) == piece)
+    if (board[4] == piece)
     {
-      if (*(board + 6) == piece)
+      if (board[6] == piece)
       {
         return true;
       }
@@ -213,7 +213,7 @@ bool Board::checkDraw()
   return true;
 }
 
-string trans(int *board, int coord)
+string trans(int board[10], int coord)
 {
   /*
   @brief translates the state of 'squares' to what is going to be displayed
@@ -228,15 +228,15 @@ string trans(int *board, int coord)
   @return one letter character that corresponds to the state
   */
   string displayed = "O";
-  if (*(board + coord - 1) == 0)
+  if (board[coord - 1] == 0) // if unoccupied, display the box number
   {
     displayed = to_string(coord);
   }
-  else if(*(board + coord - 1) == 1)
+  else if (board[coord - 1] == 1)
   {
     displayed = "X";
   }
-  else // when the state is 2
+  else if (board[coord - 1] == 2)
   {
     displayed = "O";
   }
@@ -265,18 +265,9 @@ void Board::print()
     }
     else // display either the coordinate, 'X', or 'O' according to the state
     {
-      cout << "| " << trans(squares, 3*j) << " | " << trans(squares, 3*j + 1);
-      cout << " | " << trans(squares, 3*j + 2) << " |" << endl;
+      cout << "| " << trans(squares, 3*j + 1) << " | " << trans(squares, 3*j + 2);
+      cout << " | " << trans(squares, 3*j + 3) << " |" << endl;
       j++;
     }
   }
-}
-
-int main(int argc, char ** argv)
-{
-  Board board;
-  board.place(3, 1);
-  cout << board.query(3) << endl;
-  board.print();
-  return 0;
 }

@@ -1,9 +1,8 @@
 class Board {
 private:
-  int *squares;
+  int squares[10];
 public:
   Board();
-  //~Board();
   int query(int coord);
   void place(int coord, int piece);
   int checkWin();
@@ -11,7 +10,7 @@ public:
   void print();
 };
 
-bool horizontal(int *board, int piece);
-bool vertical(int *board, int piece);
-bool diagonal(int *board, int piece);
-std::string trans(int *board, int coord);
+bool horizontal(int board[10], int piece);
+bool vertical(int board[10], int piece);
+bool diagonal(int board[10], int piece);
+std::string trans(int board[10], int coord);
